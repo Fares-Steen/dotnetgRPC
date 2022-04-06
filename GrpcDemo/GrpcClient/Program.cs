@@ -23,4 +23,17 @@ var customerClient=new Customer.CustomerClient(channel);
 
 var reply = await customerClient.GetCustomerInfoAsync(input);
 Console.WriteLine($"{reply.FirstName} {reply.LastName}");
+
+
+using (var call=customerClient.GetNewCustomers(new NewCustomerRequest()))
+{
+    while (await call.ResponseStream.MoveNext(CancellationToken.None))
+    {
+        var currentCustomer = call.ResponseStream.Current;
+        Console.WriteLine($"{currentCustomer.FirstName} {currentCustomer.LastName} {currentCustomer.EmailAddress}");
+    }
+}
+
+
+
 Console.ReadLine();
