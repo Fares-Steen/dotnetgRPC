@@ -4,12 +4,23 @@
 using Grpc.Net.Client;
 using GrpcServer;
 
-var input = new HelloRequest {Name = "Fares"};
+// var input = new HelloRequest {Name = "Fares"};
+//
+// var channel = GrpcChannel.ForAddress("http://localhost:5054");
+// var client = new Greeter.GreeterClient(channel);
+//
+// var reply = await client.SayHelloAsync(input);
+//
+// Console.WriteLine(reply.Message);
 
-var channel = GrpcChannel.ForAddress("http://localhost:5054");
-var client = new Greeter.GreeterClient(channel);
 
-var reply = await client.SayHelloAsync(input);
+var input = new CustomerLookupModel
+{
+    UserId = 1
+};
+var channel=GrpcChannel.ForAddress("http://localhost:5054");
+var customerClient=new Customer.CustomerClient(channel);
 
-Console.WriteLine(reply.Message);
+var reply = await customerClient.GetCustomerInfoAsync(input);
+Console.WriteLine($"{reply.FirstName} {reply.LastName}");
 Console.ReadLine();
